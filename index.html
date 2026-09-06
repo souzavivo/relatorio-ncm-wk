@@ -1,0 +1,275 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Diagnóstico NCM — descubra o impacto da Reforma Tributária no catálogo do seu cliente</title>
+<meta name="description" content="Cole a tabela de produtos do seu cliente, cruze com a base de NCMs impactadas pela Reforma Tributária e gere um relatório pronto em Excel e Word. Teste grátis." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #05070D;
+    --panel: #0B0F1A;
+    --panel-2: #0F1524;
+    --blue: #2E6BFF;
+    --blue-dim: #173A8A;
+    --blue-soft: #4A80FF;
+    --line: #1E2536;
+    --text-dim: #8592B0;
+    --text: #EAEFFB;
+    --alert: #FF5D5D;
+    --ok: #3ED598;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    background: var(--ink);
+    color: var(--text);
+    font-family: 'IBM Plex Sans', 'Segoe UI', sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  .mono { font-family: 'IBM Plex Mono', monospace; }
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 0 28px; }
+  a { color: inherit; }
+
+  /* ---------- nav ---------- */
+  nav.top {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 22px 0;
+  }
+  .brand { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 15px; }
+  .brand-mark {
+    width: 30px; height: 30px; border-radius: 8px; flex-shrink: 0;
+    background: linear-gradient(135deg, var(--blue), var(--blue-dim));
+    display: flex; align-items: center; justify-content: center;
+  }
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center;
+    padding: 11px 20px; border-radius: 7px; font-size: 14px; font-weight: 700;
+    text-decoration: none; cursor: pointer; border: none; transition: background .15s, transform .1s;
+  }
+  .btn-primary { background: var(--blue); color: #fff; }
+  .btn-primary:hover { background: var(--blue-soft); }
+  .btn-ghost { background: transparent; color: var(--text); border: 1px solid var(--line); }
+  .btn-ghost:hover { border-color: var(--blue); color: var(--blue); }
+  .btn-wpp { background: #25D366; color: #05230f; }
+  .btn-wpp:hover { background: #33e07a; }
+
+  /* ---------- hero ---------- */
+  .hero {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: center;
+    padding: 56px 0 88px;
+  }
+  .hero h1 {
+    font-size: 42px; line-height: 1.18; font-weight: 800; letter-spacing: -0.5px;
+    margin: 0 0 18px;
+  }
+  .hero p.lead {
+    font-size: 16.5px; color: var(--text-dim); line-height: 1.6; margin: 0 0 30px; max-width: 480px;
+  }
+  .hero-ctas { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 22px; }
+  .hero-note { font-size: 13px; color: var(--text-dim); }
+  .hero-note b { color: var(--ok); }
+
+  /* ---------- mock panel (hero visual) ---------- */
+  .mock {
+    background: var(--panel); border: 1px solid var(--line); border-radius: 12px;
+    padding: 20px; box-shadow: 0 30px 80px -30px rgba(46,107,255,0.25);
+  }
+  .mock-topbar { display: flex; gap: 6px; margin-bottom: 16px; }
+  .mock-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--line); }
+  .mock-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 14px; }
+  .mock-stat { border: 1px solid var(--line); border-radius: 8px; padding: 12px; background: var(--ink); }
+  .mock-stat .label { font-size: 10.5px; color: var(--text-dim); margin-bottom: 5px; }
+  .mock-stat .value { font-size: 20px; font-weight: 700; }
+  .mock-table { border: 1px solid var(--line); border-radius: 8px; overflow: hidden; background: var(--ink); }
+  .mock-row { display: grid; grid-template-columns: 74px 1fr 74px 96px; gap: 8px; padding: 8px 12px; font-size: 11px; border-top: 1px solid var(--line); }
+  .mock-row:first-child { border-top: none; background: #10152A; color: var(--text-dim); font-weight: 600; }
+  .mock-row.imp { color: var(--alert); }
+
+  /* ---------- section shell ---------- */
+  section { padding: 72px 0; border-top: 1px solid var(--line); }
+  .kicker { font-size: 13.5px; color: var(--blue-soft); font-weight: 600; margin: 0 0 10px; }
+  h2 { font-size: 28px; font-weight: 700; margin: 0 0 14px; letter-spacing: -0.3px; }
+  .section-lead { color: var(--text-dim); font-size: 15px; line-height: 1.65; max-width: 620px; margin: 0 0 40px; }
+
+  /* ---------- steps ---------- */
+  .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; }
+  .step { border-top: 2px solid var(--blue); padding-top: 18px; }
+  .step .num { font-family: 'IBM Plex Mono', monospace; font-size: 13px; color: var(--blue-soft); margin-bottom: 10px; }
+  .step h3 { font-size: 17px; margin: 0 0 8px; }
+  .step p { font-size: 14px; color: var(--text-dim); line-height: 1.6; margin: 0; }
+
+  /* ---------- deliverables ---------- */
+  .deliver { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+  .deliver-card { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 24px; }
+  .deliver-card h3 { font-size: 16px; margin: 0 0 8px; }
+  .deliver-card p { font-size: 13.5px; color: var(--text-dim); line-height: 1.6; margin: 0 0 16px; }
+  .deliver-preview { border: 1px dashed var(--line); border-radius: 6px; padding: 14px; font-size: 11.5px; color: var(--text-dim); }
+
+  /* ---------- video ---------- */
+  .video-box {
+    aspect-ratio: 16/9; max-width: 760px; margin: 0 auto;
+    border: 1px solid var(--line); border-radius: 12px; background: var(--panel);
+    overflow: hidden;
+  }
+  .video-box iframe { width: 100%; height: 100%; border: 0; display: block; }
+
+  /* ---------- pricing ---------- */
+  .price-box {
+    background: var(--panel); border: 1px solid var(--blue-dim); border-radius: 14px;
+    padding: 40px; max-width: 560px; margin: 0 auto; text-align: center;
+  }
+  .price-box .free { font-size: 14px; color: var(--ok); font-weight: 600; margin-bottom: 18px; }
+  .price-box .amount { font-size: 44px; font-weight: 800; }
+  .price-box .amount span { font-size: 15px; color: var(--text-dim); font-weight: 500; }
+  .price-box .fine { font-size: 13px; color: var(--text-dim); margin: 14px 0 28px; }
+  .price-ctas { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+
+  footer { padding: 32px 0 48px; }
+  footer p { font-size: 12.5px; color: var(--text-dim); margin: 0; }
+
+  @media (max-width: 860px) {
+    .hero { grid-template-columns: 1fr; padding-top: 32px; }
+    .hero h1 { font-size: 30px; }
+    .steps, .deliver { grid-template-columns: 1fr; }
+    .mock-stats { grid-template-columns: 1fr 1fr 1fr; }
+    nav.top .btn-ghost-nav { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <nav class="top">
+    <div class="brand">
+      <div class="brand-mark">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M13 2L3 14h7l-1 8 11-14h-7l1-6z" fill="#fff"/></svg>
+      </div>
+      Diagnóstico NCM
+    </div>
+    <a href="#preco" class="btn btn-ghost btn-ghost-nav">Ver preço</a>
+  </nav>
+</div>
+
+<div class="wrap">
+  <section class="hero" style="border-top:none;">
+    <div>
+      <h1>Descubra em segundos quais produtos do seu cliente serão impactados pela Reforma Tributária.</h1>
+      <p class="lead">
+        Cole a tabela de produtos, cruze com a base de NCMs impactadas e entregue um relatório pronto — em Excel e Word — sem gastar uma tarde inteira conferindo NCM por NCM.
+      </p>
+      <div class="hero-ctas">
+        <a href="https://relatorio-ncm.vercel.app/" class="btn btn-primary">Testar grátis agora</a>
+        <a href="https://wa.me/5518997599504?text=Ol%C3%A1!%20Vi%20o%20Diagn%C3%B3stico%20NCM%20e%20quero%20saber%20mais." class="btn btn-ghost">Falar no WhatsApp</a>
+      </div>
+      <p class="hero-note"><b>4 diagnósticos completos grátis</b> — sem cartão, sem compromisso.</p>
+    </div>
+
+    <div class="mock">
+      <div class="mock-topbar">
+        <div class="mock-dot"></div><div class="mock-dot"></div><div class="mock-dot"></div>
+      </div>
+      <div class="mock-stats">
+        <div class="mock-stat"><div class="label">Analisados</div><div class="value">500</div></div>
+        <div class="mock-stat"><div class="label">Impactados</div><div class="value" style="color:var(--alert);">128</div></div>
+        <div class="mock-stat"><div class="label">NCMs distintas</div><div class="value" style="color:var(--blue-soft);">34</div></div>
+      </div>
+      <div class="mock-table">
+        <div class="mock-row"><span>Código</span><span>Descrição</span><span>NCM</span><span>Impactado</span></div>
+        <div class="mock-row imp"><span class="mono">0142</span><span>Alface crespa 500g</span><span class="mono">0709.70</span><span>Sim</span></div>
+        <div class="mock-row imp"><span class="mono">0198</span><span>Batata lavada 1kg</span><span class="mono">0701.90</span><span>Sim</span></div>
+        <div class="mock-row"><span class="mono">0233</span><span>Óculos de sol</span><span class="mono">9004.10</span><span style="color:var(--text-dim);">Não</span></div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<section>
+  <div class="wrap">
+    <p class="kicker">Por que isso importa agora</p>
+    <h2>A reforma muda o enquadramento fiscal item por item — e a conferência manual não escala.</h2>
+    <p class="section-lead">
+      Com a transição da CBS e do IBS, produtos que hoje têm um tratamento tributário vão passar por regras novas conforme o NCM. Pra um catálogo de centenas ou milhares de itens, cruzar isso manualmente consome horas do time fiscal do escritório — tempo que podia ir pra atender mais clientes.
+    </p>
+
+    <div class="steps">
+      <div class="step">
+        <div class="num">01</div>
+        <h3>Cole os produtos do cliente</h3>
+        <p>Código, descrição, NCM e CST/CFOP — direto do Excel, sem reformatar nada antes.</p>
+      </div>
+      <div class="step">
+        <div class="num">02</div>
+        <h3>Cole a base de NCMs impactadas</h3>
+        <p>A lista que seu escritório já mantém, com o motivo de cada impacto.</p>
+      </div>
+      <div class="step">
+        <div class="num">03</div>
+        <h3>Baixe o relatório pronto</h3>
+        <p>Excel completo pra análise interna, e um Word já formatado pra mandar direto ao cliente.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <p class="kicker">O que você entrega pro cliente</p>
+    <h2>Dois relatórios, dois usos diferentes.</h2>
+    <div class="deliver">
+      <div class="deliver-card">
+        <h3>Excel completo</h3>
+        <p>Resumo com os totais e uma aba detalhada, produto por produto, com o motivo do impacto — pronto pra conferência interna do escritório.</p>
+        <div class="deliver-preview mono">Resumo · Detalhado<br>500 analisados · 128 impactados · 34 NCMs</div>
+      </div>
+      <div class="deliver-card">
+        <h3>Word para o cliente</h3>
+        <p>Com o nome da empresa, uma mensagem explicando o que foi encontrado, e a tabela de itens impactados — pronto pra encaminhar pro time que vai ajustar o sistema.</p>
+        <div class="deliver-preview">Diagnóstico de Impacto — Reforma Tributária<br>Empresa: [nome do cliente]</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <p class="kicker">Veja funcionando</p>
+    <h2 style="margin-bottom:32px;">Menos de dois minutos, do colar à entrega.</h2>
+    <div class="video-box">
+      <iframe
+        src="https://www.youtube-nocookie.com/embed/PAkerJhCWnI"
+        title="Diagnóstico NCM funcionando"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen
+      ></iframe>
+    </div>
+  </div>
+</section>
+
+<section id="preco">
+  <div class="wrap">
+    <p class="kicker" style="text-align:center;">Preço</p>
+    <h2 style="text-align:center; margin-bottom:36px;">Teste sem custo. Assine quando fizer sentido.</h2>
+    <div class="price-box">
+      <div class="free">4 diagnósticos completos grátis</div>
+      <div class="amount">R$ 79,90<span> /mês depois disso</span></div>
+      <p class="fine">Diagnósticos ilimitados, Excel e Word completos, sem contrato de fidelidade.</p>
+      <div class="price-ctas">
+        <a href="https://relatorio-ncm.vercel.app/" class="btn btn-primary">Testar grátis agora</a>
+        <a href="https://wa.me/5518997599504?text=Ol%C3%A1!%20Quero%20assinar%20o%20Diagn%C3%B3stico%20NCM." class="btn btn-wpp">Assinar pelo WhatsApp</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <p>Diagnóstico NCM — ferramenta de apoio à análise fiscal. Não substitui a conferência individualizada por profissional tributário.</p>
+  </div>
+</footer>
+
+</body>
+</html>
